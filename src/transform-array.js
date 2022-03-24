@@ -1,23 +1,34 @@
-const { NotImplementedError } = require('../extensions/index.js');
+function transform(arr) {
+   if (!(arr instanceof Array)) {
+      throw Error("'arr' parameter must be an instance of the Array!")
+   }
+   let res = arr.slice(0)
 
-/**
- * Create transformed array based on the control sequences that original
- * array contains
- * 
- * @param {Array} arr initial array
- * @returns {Array} transformed array
- * 
- * @example
- * 
- * transform([1, 2, 3, '--double-next', 4, 5]) => [1, 2, 3, 4, 4, 5]
- * transform([1, 2, 3, '--discard-prev', 4, 5]) => [1, 2, 4, 5]
- * 
- */
-function transform(/* arr */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+   res.map((it, ind) => {
+
+      if (res[ind] == '--discard-next' && res[ind + 1]) {
+
+         res.splice(ind, 2, 'del')
+      }
+      else if (res[ind] == '--discard-prev' && res[ind - 1] && res[ind - 1] !== 'del') {
+
+         res.splice(ind - 1, 2, 'del')
+      }
+
+      else if (res[ind] == '--double-next' && res[ind + 1]) {
+
+         res.splice(ind, 1, res[ind + 1])
+      }
+      else if (res[ind] == '--double-prev' && res[ind - 1] && res[ind - 1] !== 'del') {
+
+         res.splice(ind, 1, res[ind - 1])
+      }
+   })
+
+   res = res.filter(it => it !== 'del' && it !== '--discard-prev' && it !== '--double-prev' && it !== '--discard-next' && it !== '--double-next')
+   return res
 }
 
 module.exports = {
-  transform
+   transform
 };
