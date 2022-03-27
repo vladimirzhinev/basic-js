@@ -19,6 +19,7 @@ class DepthCalculator {
 
       arr.forEach(it => {
          if (Array.isArray(it)) {
+            console.log(it);
             let currentDepth = this.calculateDepth(it) + 1
             maxDepth = Math.max(maxDepth, currentDepth)
          }
